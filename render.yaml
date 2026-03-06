@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: gayechat-server
+    runtime: node
+    plan: free
+    buildCommand: npm install socket.io
+    startCommand: node server-standalone.mjs
+    envVars:
+      - key: NODE_ENV
+        value: production

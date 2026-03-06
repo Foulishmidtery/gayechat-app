@@ -22,11 +22,13 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
-        // Connect to the custom server running on the same host/port
-        const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || undefined;
-        const socketInstance = io(siteUrl, {
+        // NEXT_PUBLIC_SOCKET_URL: set on Vercel to the external socket server URL (e.g. Render).
+        // Locally, this is undefined = connects to same origin (custom server.mjs).
+        const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || process.env.NEXT_PUBLIC_SITE_URL || undefined;
+        const socketInstance = io(socketUrl, {
             path: "/api/socketio",
             addTrailingSlash: false,
+            transports: ["websocket", "polling"],
         });
 
         socketInstance.on("connect", () => {
